@@ -1,8 +1,9 @@
 from django.contrib import admin
 
-from loginapp.models import Message, ChatRoom
+from loginapp.models import Course, Program, UserRegister
 
 # Register your models here.
 
-admin.site.register(Message)
-admin.site.register(ChatRoom)
+admin.site.register(Course)
+admin.site.register(Program)
+admin.site.register(UserRegister)
