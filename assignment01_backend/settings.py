@@ -133,6 +133,8 @@ CORS_ALLOW_ALL_ORIGINS = True  # If this is used then `CORS_ALLOWED_ORIGINS` wil
 
 CORS_ALLOW_CREDENTIALS = True
 
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+
 CORS_ALLOWED_ORIGINS = [
 
     'http://localhost:3000',
@@ -144,3 +146,12 @@ CORS_ALLOWED_ORIGIN_REGEXES = [
     'http://localhost:3000',
 
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # Add this line
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
