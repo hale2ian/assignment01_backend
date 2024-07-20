@@ -1,0 +1,24 @@
+# This config was automatically generated from your source code
+# Stacks detected: deps:python:.,file:manage.py:.
+version: 2.1
+
+jobs:
+  test-and-lint:
+    docker:
+      - image: cimg/python:3.10.1
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: run tests
+          command: python manage.py test
+
+workflows:
+  build-and-test-workflow:
+    jobs:
+      - test-and-lint
+    # - deploy:
+    #     requires:
+    #       - test-python
