@@ -10,7 +10,7 @@ from rest_framework.authtoken.models import Token
 class UserRegisterViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.register_url = reverse('register')  # Adjust URL pattern name if necessary
+        self.register_url = reverse('register')  # Ensure this matches the name in urls.py
         self.user_register_data = {
             'username': 'testuser',
             'email': 'testuser@example.com',
@@ -18,7 +18,6 @@ class UserRegisterViewSetTest(APITestCase):
             'first_name': 'Test',
             'last_name': 'User'
         }
-        self.user_register = User.objects.create_user(**self.user_register_data)
 
     def test_user_registration(self):
         response = self.client.post(self.register_url, self.user_register_data, format='json')
@@ -30,7 +29,7 @@ class UserRegisterViewSetTest(APITestCase):
 class CourseViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.course_url = reverse('course-list')  # Adjust URL pattern name if necessary
+        self.course_url = reverse('course-list')
         self.course_data = {
             'name': 'Test Course',
         }
@@ -73,7 +72,7 @@ class CourseViewSetTest(APITestCase):
 class ProgramViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.program_url = reverse('program-list')  # Adjust URL pattern name if necessary
+        self.program_url = reverse('program-list')
         self.program_data = {
             'name': 'Test Program',
         }
