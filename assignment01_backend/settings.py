@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'loginapp',
     'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -135,15 +136,15 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 
-CORS_ALLOWED_ORIGINS = [
-
-    'http://localhost:3000',
-
-]  # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
+# CORS_ALLOWED_ORIGINS = [
+#
+#     'http://localhost:3000',
+#
+# ]  # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
 
-    'http://localhost:3000',
+    'http://localhost:3000', '*.vercel.app'
 
 ]
 
@@ -152,6 +153,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',  # Add this line
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ]
 }
