@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'assignment01_backend.wsgi.app'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'verceldb',
         'USER': 'default',
         'PASSWORD': 'vszBwUR2tgF7',
