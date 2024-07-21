@@ -1,59 +1,45 @@
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 from django.urls import reverse
-from loginapp.models import UserRegister, Course, Program
-from loginapp.serializers import UserRegisterSerializer, CourseSerializer, ProgramSerializer
+from django.contrib.auth.models import User
+from loginapp.models import Course, Program
+from loginapp.serializers import ProgramSerializer, CourseSerializer
+from rest_framework.authtoken.models import Token
+
 
 class UserRegisterViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user_register_url = reverse('userregister-list')
+        self.register_url = reverse('register')  # Adjust URL pattern name if necessary
         self.user_register_data = {
             'username': 'testuser',
-            'password': 'testpassword',
             'email': 'testuser@example.com',
+            'password': 'testpassword',
             'first_name': 'Test',
             'last_name': 'User'
         }
-        self.user_register = UserRegister.objects.create(**self.user_register_data)
+        self.user_register = User.objects.create_user(**self.user_register_data)
 
-    def test_get_user_register_list(self):
-        response = self.client.get(self.user_register_url)
-        user_registers = UserRegister.objects.all()
-        serializer = UserRegisterSerializer(user_registers, many=True)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data, serializer.data)
-
-    def test_create_user_register(self):
-        response = self.client.post(self.user_register_url, self.user_register_data, format='json')
+    def test_user_registration(self):
+        response = self.client.post(self.register_url, self.user_register_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(UserRegister.objects.count(), 2)
+        self.assertIn('token', response.data)
+        self.assertEqual(User.objects.count(), 1)
 
-    def test_update_user_register(self):
-        update_data = {
-            'first_name': 'Updated',
-            'last_name': 'User'
-        }
-        url = reverse('userregister-detail', args=[self.user_register.id])
-        response = self.client.patch(url, update_data, format='json')
-        self.user_register.refresh_from_db()
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.user_register.first_name, 'Updated')
-
-    def test_delete_user_register(self):
-        url = reverse('userregister-detail', args=[self.user_register.id])
-        response = self.client.delete(url)
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(UserRegister.objects.count(), 0)
 
 class CourseViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.course_url = reverse('course-list')
+        self.course_url = reverse('course-list')  # Adjust URL pattern name if necessary
         self.course_data = {
             'name': 'Test Course',
         }
         self.course = Course.objects.create(**self.course_data)
+
+        # Create and authenticate a user
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_get_course_list(self):
         response = self.client.get(self.course_url)
@@ -83,14 +69,20 @@ class CourseViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Course.objects.count(), 0)
 
+
 class ProgramViewSetTest(APITestCase):
     def setUp(self):
         self.client = APIClient()
-        self.program_url = reverse('program-list')
+        self.program_url = reverse('program-list')  # Adjust URL pattern name if necessary
         self.program_data = {
             'name': 'Test Program',
         }
         self.program = Program.objects.create(**self.program_data)
+
+        # Create and authenticate a user
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.token = Token.objects.create(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
     def test_get_program_list(self):
         response = self.client.get(self.program_url)
