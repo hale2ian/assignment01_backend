@@ -1,12 +1,7 @@
 from rest_framework import viewsets
 
-from loginapp.models import UserRegister, Course, Program
-from loginapp.serializers import UserRegisterSerializer, CourseSerializer, ProgramSerializer
-
-
-class UserRegisterViewSet(viewsets.ModelViewSet):
-    serializer_class = UserRegisterSerializer
-    queryset = UserRegister.objects.all()
+from loginapp.models import Course, Program
+from loginapp.serializers import CourseSerializer, ProgramSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
